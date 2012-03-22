@@ -6,6 +6,7 @@ public class Factory
 {
 	public static Polygon makeImmutable (List<Vector> vertices)
 	{
+		System.out.println("Hello PC");
 		return new ImmutablePolygon(vertices);
 	}
 
