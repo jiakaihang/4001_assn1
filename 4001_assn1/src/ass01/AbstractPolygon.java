@@ -181,8 +181,34 @@ public abstract class AbstractPolygon implements Polygon {
 	
 	@Override
 	public boolean isEquivalent(Polygon that) {
-		// TODO Auto-generated method stub
-		return false;
+		int N1 = this.vertices().size();
+		int N2 = that.vertices().size();
+		
+		if(N1 != N2)
+			return false;
+		else if(N1 == 0 && N2 == 0)
+			return true;
+		
+		else{
+			int i = 0;
+			int j = 0;
+			while(i<N1 && j<N2){
+				if(this.vertices().get(i).equals(that.vertices().get(j))){
+					i++;
+					j++;
+				}
+				else{
+					if(i==0)
+						j++;
+					else{
+						return false;
+					}
+				}
+				if(j==N1 && i<N1 && N1!=1)
+					j = 0;
+			}
+			return true;
+		}
 	}
 
 	/* (non-Javadoc)
@@ -190,8 +216,7 @@ public abstract class AbstractPolygon implements Polygon {
 	 */
 	@Override
 	public Polygon freeze() {
-		// TODO Auto-generated method stub
-		return null;
+		return this;
 	}
 
 	/* (non-Javadoc)
