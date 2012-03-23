@@ -11,13 +11,11 @@ public class Factory
 
 	public static Polygon.Mutable makeUnsafe (List<Vector> vertices)
 	{
-		// TODO
-		return null;
+		return new UnsafePolygon(vertices);
 	}
 
 	public static Polygon.Mutable makeSynchronized (List<Vector> vertices)
 	{
-		// TODO
 		return null;
 	}
 

@@ -1,36 +1,16 @@
-/**
- * 
- */
 package ass01;
 
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author Kaihang
- *
- */
-public abstract class AbstractPolygon implements Polygon {
-	
-	private List<Vector> vertices;
-	/**
-	 * 
-	 */
-	public AbstractPolygon (List<Vector> vertices) {
-		
-		this.vertices = vertices;
-		
-		//check();	// check if the arguments are valid;
-		
-	}
+public class UnsafePolygon implements Polygon.Mutable{
 
-	/**
-	 * 
-	 * 
-	 */
-//	private void check() throws IllegalArgumentException{
-//		if(!isValid() || this.area() < 0 || this.perimeter() < 0)
-//			throw new IllegalArgumentException();
-//	}
+	private List<Vector> vertices;
+	
+	public UnsafePolygon(List<Vector> vertices) {
+		//super(vertices);
+		this.vertices = vertices;
+	}
 	
 	@Override
 	public List<Vector> vertices() {
@@ -88,10 +68,6 @@ public abstract class AbstractPolygon implements Polygon {
 		return pSum;	
 	}
 
-
-	/* (non-Javadoc)
-	 * @see ass01.Polygon#getVertex(int)
-	 */
 	@Override
 	public Vector getVertex(int index) throws IllegalArgumentException {
 		if (index >= vertices.size() || index < 0)
@@ -99,10 +75,6 @@ public abstract class AbstractPolygon implements Polygon {
 		return vertices.get(index);
 	}
 
-	/* (non-Javadoc)
-	 * @see ass01.Polygon#interiorAngle(int)
-	 * 
-	 */
 	@Override
 	public double interiorAngle(int index) throws IllegalArgumentException {
 		int N = vertices.size();
@@ -124,14 +96,7 @@ public abstract class AbstractPolygon implements Polygon {
 			return Math.acos(cosine);
 		}
 	}
-	
 
-	/**
-	 * Validate the polygon by utilize the fact that a convex anti-clockwise
-	 * ordered polygon has a POSITIVE value of cross product of all 
-	 * adjacent vectors 
-	 * 
-	 */
 	@Override
 	public boolean isValid() {
 		if(vertices == null){
@@ -169,7 +134,12 @@ public abstract class AbstractPolygon implements Polygon {
 		}
 		return true;
 	}
-	
+
+	@Override
+	public Polygon intersect(Polygon that) {
+		return null;
+	}
+
 	@Override
 	public boolean isEquivalent(Polygon that) {
 		int N1 = this.vertices().size();
@@ -206,13 +176,53 @@ public abstract class AbstractPolygon implements Polygon {
 		}
 	}
 
-
-	/* (non-Javadoc)
-	 * @see ass01.Polygon#intersect(ass01.Polygon)
-	 */
 	@Override
-	public Polygon intersect(Polygon that) {
-		return null;
+	public Mutable copy() {
+		return new UnsafePolygon(this.vertices());
 	}
 
+	@Override
+	public Mutable makeMutable() {
+		return this;
+	}
+
+	@Override
+	public Polygon freeze() {
+		return new ImmutablePolygon(this.vertices());
+	}
+
+	@Override
+	public void scale(double factor) throws IllegalArgumentException {
+		for(Vector v: this.vertices())
+			v.scale(factor);
+	}
+
+	@Override
+	public void translate(Vector shift) {
+		for(Vector v: this.vertices())
+			v.add(shift);
+	}
+
+	/**
+	 * Make a copy of the original vertices and do setVertex() 
+	 * on this.vertices
+	 * if isValid() then return true
+	 * if !isValid() then change the vertices back to the original vertices
+	 * and return false.
+	 */
+	@Override
+	public boolean setVertex(int index, Vector vertex)
+			throws IllegalArgumentException {
+		if(index<0 || index>=this.vertices().size())
+			throw new IllegalArgumentException();
+		List<Vector> origin = new ArrayList<Vector>(this.vertices());
+		this.vertices.set(index, vertex);
+		
+		if(!isValid()){
+			this.vertices = origin;
+			return false;
+		}			
+		return true;
+	}
+	
 }

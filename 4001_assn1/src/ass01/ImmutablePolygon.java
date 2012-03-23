@@ -15,7 +15,12 @@ public final class ImmutablePolygon extends AbstractPolygon {
 
 	@Override
 	public Mutable makeMutable() {
-		return null;
+		return new UnsafePolygon(this.vertices());
+	}
+
+	@Override
+	public Polygon freeze() {
+		return this;
 	}
 
 }
