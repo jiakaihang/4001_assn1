@@ -21,19 +21,16 @@ public class Factory
 
 	public static Polygon.Mutable makeMutex (List<Vector> vertices)
 	{
-		// TODO
-		return null;
+		return new MutexPolygon(vertices);
 	}
 
 	public static Polygon.Mutable makeReadWrite (List<Vector> vertices)
 	{
-		// TODO
-		return null;
+		return new ReadWritePolygon(vertices);
 	}
 
 	public static Polygon.Mutable makeCopyOnWrite (List<Vector> vertices)
 	{
-		// TODO
-		return null;
+		return new CopyOnWritePolygon(vertices);
 	}
 }

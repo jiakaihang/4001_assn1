@@ -5,10 +5,10 @@ import java.util.List;
 
 public class UnsafePolygon implements Polygon.Mutable{
 
-	private List<Vector> vertices;
+	protected List<Vector> vertices;
 	
 	public UnsafePolygon(List<Vector> vertices) {
-		this.vertices = vertices;
+		this.vertices = new ArrayList<Vector> (vertices);
 	}
 	
 	@Override
@@ -67,7 +67,7 @@ public class UnsafePolygon implements Polygon.Mutable{
 	public Vector getVertex(int index) throws IllegalArgumentException {
 		if (index >= vertices.size() || index < 0)
 			throw new IllegalArgumentException();
-		return vertices.get(index);
+		return this.vertices().get(index);
 	}
 
 	@Override
@@ -172,7 +172,7 @@ public class UnsafePolygon implements Polygon.Mutable{
 
 	@Override
 	public Mutable makeMutable() {
-		return this;
+		return (Polygon.Mutable) this;
 	}
 
 	@Override

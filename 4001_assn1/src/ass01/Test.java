@@ -4,6 +4,8 @@ import static ass01.Vector.at;
 
 import java.util.Collection;
 import java.util.List;
+
+import ass01.Polygon.Mutable;
 import static java.util.Arrays.asList;
 
 public class Test {
@@ -44,29 +46,30 @@ public class Test {
 	}
 	
 	public static void unsafeTest(List<Vector> vertices){
-		Polygon.Mutable poly = new UnsafePolygon(vertices);
-		display(poly, squareArea, squarePerimeter);
+		Polygon poly = new UnsafePolygon(vertices);
+		display(poly, 0, 0);
 //		System.out.println("interior angle = "+poly.interiorAngle(0));
 //		System.out.println("Expected interior angle = " + triangleAngle);
 		
-		//test scale
-		double factor = 1.00001d;
-		
-		System.out.println("The factor is: " + factor);
-		
-		double area = squareArea * factor * factor;
-		double perimeter = squarePerimeter * factor;
-		try{
-			poly.scale(factor);
-		}
-		catch(IllegalArgumentException e){
-			System.out.println("Illegal Argument Exception caught: " + e.getMessage());
-		}
-		display(poly, area, perimeter);
+//		//test scale
+//		double factor = 1.00001d;
+//		
+//		System.out.println("The factor is: " + factor);
+//		
+//		double area = squareArea * factor * factor;
+//		double perimeter = squarePerimeter * factor;
+//		try{
+//			poly.scale(factor);
+//		}
+//		catch(IllegalArgumentException e){
+//			System.out.println("Illegal Argument Exception caught: " + e.getMessage());
+//		}
+//		display(poly, area, perimeter);
 //		
 		//test translate
-		poly.translate(at(5,5));
-		display(poly, area, perimeter);
+		Polygon.Mutable mutable = (Polygon.Mutable) poly;
+		mutable.translate(at(5,5));
+		System.out.println(poly.getVertex(0));
 
 //		//test setVertex
 //		try{
@@ -81,7 +84,7 @@ public class Test {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		unsafeTest(asList(square1));
+		unsafeTest(asList(at(5,5)));
 	}
 
 }

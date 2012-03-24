@@ -14,18 +14,16 @@ import ass01.Polygon.Mutable;
  */
 public class SynchronizedPolygon extends UnsafePolygon {
 
-	private List<Vector> vertices;
 	/**
 	 * @param vertices
 	 */
 	public SynchronizedPolygon(List<Vector> vertices) {
 		super(vertices);
-		this.vertices = vertices;
 	}
 	
 	@Override
 	public synchronized Vector getVertex(int index) throws IllegalArgumentException {
-		if (index >= vertices.size() || index < 0)
+		if (index >= this.vertices().size() || index < 0)
 			throw new IllegalArgumentException();
 		return this.vertices().get(index);
 	}
@@ -33,16 +31,16 @@ public class SynchronizedPolygon extends UnsafePolygon {
 	@Override
 	public void scale(double factor) throws IllegalArgumentException {
 		synchronized(this){
-			for(int i=0; i<vertices.size(); i++)
-				this.vertices.set(i, this.vertices.get(i).scale(factor));
+			for(int i=0; i<this.vertices().size(); i++)
+				this.vertices().set(i, this.vertices().get(i).scale(factor));
 		}
 	}
 
 	@Override
 	public void translate(Vector shift) {
 		synchronized(this){
-			for(int i=0; i<vertices.size(); i++)
-				this.vertices.set(i, this.vertices.get(i).add(shift));
+			for(int i=0; i<vertices().size(); i++)
+				this.vertices().set(i, this.vertices().get(i).add(shift));
 		}
 	}
 
@@ -60,7 +58,7 @@ public class SynchronizedPolygon extends UnsafePolygon {
 			throw new IllegalArgumentException();
 		synchronized(this){
 			List<Vector> origin = new ArrayList<Vector>(this.vertices());
-			this.vertices.set(index, vertex);
+			this.vertices().set(index, vertex);
 			
 			if(!isValid()){
 				this.vertices = origin;
@@ -72,6 +70,6 @@ public class SynchronizedPolygon extends UnsafePolygon {
 
 	@Override
 	public Mutable copy() {
-		return new UnsafePolygon(this.vertices());
+		return new SynchronizedPolygon(this.vertices());
 	}
 }

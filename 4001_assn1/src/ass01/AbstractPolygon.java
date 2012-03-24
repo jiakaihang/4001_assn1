@@ -3,6 +3,7 @@
  */
 package ass01;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,11 +17,8 @@ public abstract class AbstractPolygon implements Polygon {
 	 * 
 	 */
 	public AbstractPolygon (List<Vector> vertices) {
-		
-		this.vertices = vertices;
-		
+		this.vertices = new ArrayList<Vector>(vertices);
 		//check();	// check if the arguments are valid;
-		
 	}
 
 	/**
@@ -34,7 +32,7 @@ public abstract class AbstractPolygon implements Polygon {
 	
 	@Override
 	public List<Vector> vertices() {
-		return vertices;
+		return this.vertices;
 	}
 
 	/**
@@ -53,12 +51,10 @@ public abstract class AbstractPolygon implements Polygon {
 			return 0;
 		double vpSum = 0;
 		int i;
-		int j = N-1;
 		for(i = 0; i<N; i++){
-			Vector v1 = vertices.get(j);
-			Vector v2 = vertices.get(i);
+			Vector v1 = vertices.get(i);
+			Vector v2 = vertices.get((i+1)%N);
 			vpSum += v1.vectorProduct(v2);
-			j=i;
 		}
 		return (0.5*vpSum);
 	}
@@ -77,13 +73,11 @@ public abstract class AbstractPolygon implements Polygon {
 			return 0;
 		double pSum = 0;
 		int i;
-		int j = N-1;
 		for(i=0; i<N; i++){
-			Vector v1 = vertices.get(j);
-			Vector v2 = vertices.get(i);
+			Vector v1 = vertices.get(i);
+			Vector v2 = vertices.get((i+1)%N);
 			Vector vDiff = v2.subtract(v1);
 			pSum += Math.sqrt(vDiff.scalarProduct(vDiff));
-			j = i;
 		}
 		return pSum;	
 	}
@@ -96,7 +90,7 @@ public abstract class AbstractPolygon implements Polygon {
 	public Vector getVertex(int index) throws IllegalArgumentException {
 		if (index >= vertices.size() || index < 0)
 			throw new IllegalArgumentException();
-		return vertices.get(index);
+		return this.vertices().get(index);
 	}
 
 	/* (non-Javadoc)
