@@ -52,7 +52,35 @@ public abstract class PolygonTest {
 	List<Vector> vertexList() { return asList(vertexArray); }
 	int lastIndex() { return vertexArray.length - 1; }
 
+	/**
+	 * The test polygon.
+	 */
 	Polygon poly;
+	
+	/**
+	 * Display data for test polygon, with expected values for area and perimeter.
+	 */
+	void display() {
+		
+		List<Vector> vs = poly.vertices();
+		int n = vs.size();
+		System.out.print(" Polygon: n = ");System.out.print(n);
+		System.out.print(" area = "); System.out.print(poly.area());
+		System.out.print(" perimeter = "); System.out.print(poly.perimeter());
+		if (n < 10) {
+			System.out.print(" vertices = ");
+			System.out.print(vs);
+		}
+		System.out.println();
+
+		System.out.print(" Expected:     ");
+		System.out.print(" area = "); System.out.print(area);
+		System.out.print(" perimeter = "); System.out.print(perimeter);
+		System.out.println();
+		System.out.println();
+	}
+	
+
 
 	@Test
 	public void testIsValid() {

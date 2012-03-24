@@ -16,7 +16,7 @@ public class Factory
 
 	public static Polygon.Mutable makeSynchronized (List<Vector> vertices)
 	{
-		return null;
+		return new SynchronizedPolygon(vertices);
 	}
 
 	public static Polygon.Mutable makeMutex (List<Vector> vertices)

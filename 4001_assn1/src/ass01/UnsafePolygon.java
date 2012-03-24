@@ -8,7 +8,6 @@ public class UnsafePolygon implements Polygon.Mutable{
 	private List<Vector> vertices;
 	
 	public UnsafePolygon(List<Vector> vertices) {
-		//super(vertices);
 		this.vertices = vertices;
 	}
 	
@@ -33,12 +32,10 @@ public class UnsafePolygon implements Polygon.Mutable{
 			return 0;
 		double vpSum = 0;
 		int i;
-		int j = N-1;
 		for(i = 0; i<N; i++){
-			Vector v1 = vertices.get(j);
-			Vector v2 = vertices.get(i);
+			Vector v1 = vertices.get(i);
+			Vector v2 = vertices.get((i+1)%N);
 			vpSum += v1.vectorProduct(v2);
-			j=i;
 		}
 		return (0.5*vpSum);
 	}
@@ -57,13 +54,11 @@ public class UnsafePolygon implements Polygon.Mutable{
 			return 0;
 		double pSum = 0;
 		int i;
-		int j = N-1;
 		for(i=0; i<N; i++){
-			Vector v1 = vertices.get(j);
-			Vector v2 = vertices.get(i);
+			Vector v1 = vertices.get(i);
+			Vector v2 = vertices.get((i+1)%N);
 			Vector vDiff = v2.subtract(v1);
 			pSum += Math.sqrt(vDiff.scalarProduct(vDiff));
-			j = i;
 		}
 		return pSum;	
 	}
@@ -84,9 +79,9 @@ public class UnsafePolygon implements Polygon.Mutable{
 		else if(N==1 || N==2)
 			return 0;
 		else{
-			Vector vPrev = vertices.get(index-1);
+			Vector vPrev = vertices.get(((index-1)+N)%N);
 			Vector v	 = vertices.get(index);
-			Vector vNext = vertices.get(index+1);
+			Vector vNext = vertices.get((index+1)%N);
 			
 			Vector v1 = vPrev.subtract(v);
 			Vector v2 = vNext.subtract(v);
@@ -113,23 +108,17 @@ public class UnsafePolygon implements Polygon.Mutable{
 				return false;
 		}
 		else{
-			int i;
-			int j = N-1;
-			int k = N-2;
 			//vNext = v(i+1) vCurr = v(i) vPrev = v(i-1)
-			for(i=0; i<N; i++){
-				Vector vNext = vertices.get(i);
-				Vector vCurr = vertices.get(j);
-				Vector vPrev = vertices.get(k);
+			for(int i=0; i<N; i++){
+				Vector vPrev = vertices.get(((i-1)+N)%N);
+				Vector vCurr = vertices.get(i);
+				Vector vNext = vertices.get((i+1)%N);
 				Vector v1 = vCurr.subtract(vPrev);
 				Vector v2 = vNext.subtract(vCurr);
 				double crossProduct = v1.vectorProduct(v2);
 				
 				if(crossProduct <= 0)
 					return false;
-				
-				k=j;
-				j=i;
 			}
 		}
 		return true;
@@ -193,14 +182,14 @@ public class UnsafePolygon implements Polygon.Mutable{
 
 	@Override
 	public void scale(double factor) throws IllegalArgumentException {
-		for(Vector v: this.vertices())
-			v.scale(factor);
+		for(int i=0; i<vertices.size(); i++)
+			this.vertices.set(i, this.vertices.get(i).scale(factor));
 	}
 
 	@Override
 	public void translate(Vector shift) {
-		for(Vector v: this.vertices())
-			v.add(shift);
+		for(int i=0; i<vertices.size(); i++)
+			this.vertices.set(i, this.vertices.get(i).add(shift));
 	}
 
 	/**

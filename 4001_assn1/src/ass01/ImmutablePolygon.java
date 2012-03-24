@@ -10,7 +10,7 @@ public final class ImmutablePolygon extends AbstractPolygon {
 
 	@Override
 	public Mutable copy() {
-		return null;
+		return new UnsafePolygon(this.vertices());
 	}
 
 	@Override

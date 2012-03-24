@@ -112,9 +112,9 @@ public abstract class AbstractPolygon implements Polygon {
 		else if(N==1 || N==2)
 			return 0;
 		else{
-			Vector vPrev = vertices.get(index-1);
+			Vector vPrev = vertices.get(((index-1)+N)%N);
 			Vector v	 = vertices.get(index);
-			Vector vNext = vertices.get(index+1);
+			Vector vNext = vertices.get((index+1)%N);
 			
 			Vector v1 = vPrev.subtract(v);
 			Vector v2 = vNext.subtract(v);
@@ -148,23 +148,17 @@ public abstract class AbstractPolygon implements Polygon {
 				return false;
 		}
 		else{
-			int i;
-			int j = N-1;
-			int k = N-2;
 			//vNext = v(i+1) vCurr = v(i) vPrev = v(i-1)
-			for(i=0; i<N; i++){
-				Vector vNext = vertices.get(i);
-				Vector vCurr = vertices.get(j);
-				Vector vPrev = vertices.get(k);
+			for(int i=0; i<N; i++){
+				Vector vPrev = vertices.get(((i-1)+N)%N);
+				Vector vCurr = vertices.get(i);
+				Vector vNext = vertices.get((i+1)%N);
 				Vector v1 = vCurr.subtract(vPrev);
 				Vector v2 = vNext.subtract(vCurr);
 				double crossProduct = v1.vectorProduct(v2);
 				
 				if(crossProduct <= 0)
 					return false;
-				
-				k=j;
-				j=i;
 			}
 		}
 		return true;
