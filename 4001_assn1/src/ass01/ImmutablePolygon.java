@@ -7,15 +7,15 @@ public final class ImmutablePolygon extends AbstractPolygon {
 	public ImmutablePolygon(List<Vector> vertices) {
 		super(vertices);
 	}
-
+	
 	@Override
 	public Mutable copy() {
-		return new UnsafePolygon(this.vertices());
+		return new UnsafePolygon(super.vertices);
 	}
 
 	@Override
 	public Mutable makeMutable() {
-		return new UnsafePolygon(this.vertices());
+		return new UnsafePolygon(super.vertices);
 	}
 
 	@Override

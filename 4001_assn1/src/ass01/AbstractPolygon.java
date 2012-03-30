@@ -12,7 +12,7 @@ import java.util.List;
  */
 public abstract class AbstractPolygon implements Polygon {
 	
-	private List<Vector> vertices;
+	protected List<Vector> vertices;
 	/**
 	 * 
 	 */
@@ -32,7 +32,7 @@ public abstract class AbstractPolygon implements Polygon {
 	
 	@Override
 	public List<Vector> vertices() {
-		return this.vertices;
+		return new MyList<Vector>(this.vertices);
 	}
 
 	/**
@@ -90,7 +90,7 @@ public abstract class AbstractPolygon implements Polygon {
 	public Vector getVertex(int index) throws IllegalArgumentException {
 		if (index >= vertices.size() || index < 0)
 			throw new IllegalArgumentException();
-		return this.vertices().get(index);
+		return this.vertices.get(index);
 	}
 
 	/* (non-Javadoc)

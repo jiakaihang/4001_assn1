@@ -13,7 +13,7 @@ public class UnsafePolygon implements Polygon.Mutable{
 	
 	@Override
 	public List<Vector> vertices() {
-		return vertices;
+		return new MyList<Vector>(this.vertices);
 	}
 
 	/**
@@ -67,7 +67,7 @@ public class UnsafePolygon implements Polygon.Mutable{
 	public Vector getVertex(int index) throws IllegalArgumentException {
 		if (index >= vertices.size() || index < 0)
 			throw new IllegalArgumentException();
-		return this.vertices().get(index);
+		return this.vertices.get(index);
 	}
 
 	@Override
@@ -108,6 +108,29 @@ public class UnsafePolygon implements Polygon.Mutable{
 				return false;
 		}
 		else{
+			//vNext = v(i+1) vCurr = v(i) vPrev = v(i-1)
+			for(int i=0; i<N; i++){
+				Vector vPrev = vertices.get(((i-1)+N)%N);
+				Vector vCurr = vertices.get(i);
+				Vector vNext = vertices.get((i+1)%N);
+				Vector v1 = vCurr.subtract(vPrev);
+				Vector v2 = vNext.subtract(vCurr);
+				double crossProduct = v1.vectorProduct(v2);
+				
+				if(crossProduct <= 0)
+					return false;
+			}
+		}
+		return true;
+	}
+	
+	public boolean isValid(List<Vector> vertices) {
+		if(vertices == null){
+			return false;
+		}
+		int N = vertices.size();
+		//A polygon with 0, 1 or 2-vertex is always true;
+		if(N>2){
 			//vNext = v(i+1) vCurr = v(i) vPrev = v(i-1)
 			for(int i=0; i<N; i++){
 				Vector vPrev = vertices.get(((i-1)+N)%N);
@@ -167,7 +190,7 @@ public class UnsafePolygon implements Polygon.Mutable{
 
 	@Override
 	public Mutable copy() {
-		return new UnsafePolygon(this.vertices());
+		return new UnsafePolygon(this.vertices);
 	}
 
 	@Override
@@ -177,7 +200,7 @@ public class UnsafePolygon implements Polygon.Mutable{
 
 	@Override
 	public Polygon freeze() {
-		return new ImmutablePolygon(this.vertices());
+		return new ImmutablePolygon(this.vertices);
 	}
 
 	@Override
@@ -202,16 +225,16 @@ public class UnsafePolygon implements Polygon.Mutable{
 	@Override
 	public boolean setVertex(int index, Vector vertex)
 			throws IllegalArgumentException {
-		if(index<0 || index>=this.vertices().size())
+		if(index<0 || index>=this.vertices.size())
 			throw new IllegalArgumentException();
-		List<Vector> origin = new ArrayList<Vector>(this.vertices());
-		this.vertices.set(index, vertex);
+		List<Vector> temp = new ArrayList<Vector>(this.vertices);
+		temp.set(index, vertex);
 		
-		if(!isValid()){
-			this.vertices = origin;
-			return false;
+		if(isValid(temp)){
+			this.vertices = temp;
+			return true;
 		}			
-		return true;
+		return false;
 	}
 	
 }
