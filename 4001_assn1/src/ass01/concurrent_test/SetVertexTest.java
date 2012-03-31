@@ -84,11 +84,11 @@ public class SetVertexTest extends ConcurrentTestUtil {
 			public void run() {
 				for (int k = 1; k <= n; ++k ) {
 					Vector vertex = nextVertex(i, k);
+					//System.out.println("Vertices are: "+poly.vertices()+"\t setVertex("+i+", "+vertex+") ");
 					boolean ok = poly.setVertex(i, vertex);
 // DEBUG					
-					//System.out.println("setVertex("+i+", "+vertex+") " + ok);
+//					System.out.println("Vertices are: "+poly.vertices()+"\t setVertex("+i+", "+vertex+") "+ok);
 					if (!ok) {
-						System.out.println("Vertices are: "+poly.vertices()+"\t setVertex("+i+", "+vertex+") " + ok);
 						// so we should be expecting a false return
 						assertFalse("false for setVertex at "+i+" to "+vertex, expectSetVertexOK);
 						// otherwise set has failed so terminate the runnable

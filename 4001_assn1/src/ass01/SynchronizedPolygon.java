@@ -55,7 +55,7 @@ public class SynchronizedPolygon extends UnsafePolygon {
 			List<Vector> origin = new ArrayList<Vector>(vertices);
 			vertices.set(index, vertex);
 			
-			if(!isValid()){
+			if(!isValid(vertices())){
 				vertices = origin;
 				return false;
 			}			

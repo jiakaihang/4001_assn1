@@ -94,10 +94,11 @@ public class UnsafePolygon implements Polygon.Mutable{
 
 	@Override
 	public boolean isValid() {
-		if(vertices == null){
+		List<Vector> vs = vertices();
+		if(vs == null){
 			return false;
 		}
-		int N = vertices.size();
+		int N = vs.size();
 		//A polygon with 0, 1 or 2-vertex is always true;
 		if(N == 0 || N == 1){
 			if(area()!=0 && perimeter()!=0)
@@ -110,9 +111,9 @@ public class UnsafePolygon implements Polygon.Mutable{
 		else{
 			//vNext = v(i+1) vCurr = v(i) vPrev = v(i-1)
 			for(int i=0; i<N; i++){
-				Vector vPrev = vertices.get(((i-1)+N)%N);
-				Vector vCurr = vertices.get(i);
-				Vector vNext = vertices.get((i+1)%N);
+				Vector vPrev = vs.get(((i-1)+N)%N);
+				Vector vCurr = vs.get(i);
+				Vector vNext = vs.get((i+1)%N);
 				Vector v1 = vCurr.subtract(vPrev);
 				Vector v2 = vNext.subtract(vCurr);
 				double crossProduct = v1.vectorProduct(v2);
